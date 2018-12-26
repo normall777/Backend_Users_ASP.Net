@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApplicationUsers.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WebApplicationUsers.Models;
 
 namespace WebApplicationUsers
 {
@@ -34,11 +35,19 @@ namespace WebApplicationUsers
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            //Пункт 3. Подробнее тут https://metanit.com/sharp/aspnet5/16.2.php и тут https://metanit.com/sharp/aspnet5/2.1.php
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddDefaultUI()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            //services.AddDefaultIdentity<IdentityUser>()
+                //.AddEntityFrameworkStores<ApplicationDbContext>();
+
+            
+
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -62,7 +71,6 @@ namespace WebApplicationUsers
             app.UseCookiePolicy();
 
             app.UseAuthentication();
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
