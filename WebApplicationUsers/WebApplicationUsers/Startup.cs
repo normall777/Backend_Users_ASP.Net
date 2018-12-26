@@ -36,7 +36,14 @@ namespace WebApplicationUsers
             });
 
             //Пункт 3. Подробнее тут https://metanit.com/sharp/aspnet5/16.2.php и тут https://metanit.com/sharp/aspnet5/2.1.php
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.Password.RequiredLength = 6; // Минимальная длина
+                options.Password.RequireNonAlphanumeric = false; // Требуются ли не алфавитно-цифровые символы
+                options.Password.RequireLowercase = false; // Требуются ли символы в нижнем регистре
+                options.Password.RequireUppercase = false; // Требуются ли символы в верхнем регистре
+                options.Password.RequireDigit = false; // Требуются ли цифры
+            })
                 .AddDefaultUI()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
