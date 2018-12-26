@@ -11,9 +11,15 @@ namespace WebApplicationUsers.Controllers
 {
     public class UsersController : Controller
     {
+        ApplicationDbContext _context;
+        public UsersController(ApplicationDbContext context)
+        {
+            _context = context;
+        }
         public IActionResult Index()
         {
-            return View();
+            var users = _context.Users.ToList();
+            return View(users);
         }
 
         /// <summary>
