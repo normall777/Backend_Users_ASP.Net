@@ -1,4 +1,4 @@
-﻿@model object
+﻿@model List<ApplicationUser>
 
 @{
     ViewBag.Title = "Управление пользователями";
@@ -43,10 +43,14 @@
     <th>ФИО</th>
     <th>Дата рождения</th>
     </tr>
-    @*@@foreach (var user in )
+    @foreach (var user in Model)
     {
-
-    }*@
-
+        <tr>
+            <td>ССЫЛКИ НА ДЕЙСТВИЯ</td>
+            <td>@user.Email</td>
+            <td>@user.Surname @user.Name @user.Patronymic</td>
+            <td>@user.DateOfBirth</td>
+        </tr>
+    }
 </table>
 
