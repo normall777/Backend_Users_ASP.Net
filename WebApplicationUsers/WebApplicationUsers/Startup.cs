@@ -46,7 +46,7 @@ namespace WebApplicationUsers
                 options.Password.RequireDigit = false; // Требуются ли цифры
             })
                 .AddDefaultUI()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(

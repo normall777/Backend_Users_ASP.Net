@@ -50,8 +50,10 @@ namespace WebApplicationUsers.Controllers
                     new Random().Next(1000000).ToString() + DateTime.Now.ToLongDateString() + new Random().Next(1000000).ToString()); //Генерация пароля
                 if (result.Succeeded)
                 {
+                    var _user = await userManager.FindByNameAsync(model.Email);
+
                     //Генерация токена сброса пароля
-                    string code = await userManager.GeneratePasswordResetTokenAsync(user);
+                    string code = await userManager.GeneratePasswordResetTokenAsync(_user);
                     var urlEncode = HttpUtility.UrlEncode(code);
                     var callbackUrl = $"{Request.Scheme}://{Request.Host.Value}/Identity/Account/ResetPassword?userId={user.Id}&code={urlEncode}";
                     //Отправка Email
