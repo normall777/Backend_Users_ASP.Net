@@ -6,19 +6,20 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebApplicationUsers.Data;
 using WebApplicationUsers.Models;
+using WebApplicationUsers.ViewModels;
 
 namespace WebApplicationUsers.Controllers
 {
     public class UsersController : Controller
     {
-        ApplicationDbContext _context;
+        
         public UsersController(ApplicationDbContext context)
         {
-            _context = context;
+            
         }
-        public IActionResult Index()
+        public IActionResult Index([FromServices] ApplicationDbContext db)
         {
-            var users = _context.Users.ToList();
+            var users = db.Users.ToList();
             return View(users);
         }
 
@@ -51,6 +52,43 @@ namespace WebApplicationUsers.Controllers
             return View("Index");
         }
 
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterViewModel model, 
+            [FromServices] UserManager<ApplicationUser> userManager,
+            [FromServices] SignInManager<ApplicationUser> signInManager)
+        {
+            if (ModelState.IsValid)
+            {
+                ApplicationUser user = new ApplicationUser
+                {
+                    Email = model.Email,
+                    UserName = model.Email,
+                    Name = model.Name,
+                    Surname = model.Surname,
+                    Patronymic = model.Patronymic,
+                    DateOfBirth = model.DateOfBirth
+                };
+                var result = await userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    await signInManager.SignInAsync(user, false);
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+            }
+            return View(model);
+        }
 
     }
 }

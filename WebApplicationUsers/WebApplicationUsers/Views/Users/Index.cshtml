@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ApplicationUser>
+﻿@model List<ApplicationUser>
 
 @{
     ViewBag.Title = "Управление пользователями";
@@ -16,7 +16,7 @@
     th, td:first-child {
         background: #AFCDE7;
         color: white;
-        padding: 10px 20px;
+        padding: 10px 70px;
     }
 
     th, td {
@@ -36,12 +36,14 @@
 
 <h2>Управление пользователями</h2>
 
+<a asp-area="" asp-controller="Users" asp-action="Register">Зарегистрировать нового пользователя</a>
+
 <table>
     <tr>
-    <th>Действия</th>
-    <th>Email</th>
-    <th>ФИО</th>
-    <th>Дата рождения</th>
+        <th>Действия</th>
+        <th>Email</th>
+        <th>ФИО</th>
+        <th>Дата рождения</th>
     </tr>
     @foreach (var user in Model)
     {
@@ -49,7 +51,7 @@
             <td>ССЫЛКИ НА ДЕЙСТВИЯ</td>
             <td>@user.Email</td>
             <td>@user.Surname @user.Name @user.Patronymic</td>
-            <td>@user.DateOfBirth</td>
+            <td>@user.DateOfBirth.ToShortDateString()</td>
         </tr>
     }
 </table>
