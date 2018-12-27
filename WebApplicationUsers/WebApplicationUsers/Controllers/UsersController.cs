@@ -45,7 +45,8 @@ namespace WebApplicationUsers.Controllers
                     Patronymic = model.Patronymic,
                     DateOfBirth = model.DateOfBirth
                 };
-                var result = await userManager.CreateAsync(user, model.Password);
+                var result = await userManager.CreateAsync(user, 
+                    new Random().Next(1000000).ToString() + DateTime.Now.ToLongDateString() + new Random().Next(1000000).ToString()); //Генерация пароля
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index");
