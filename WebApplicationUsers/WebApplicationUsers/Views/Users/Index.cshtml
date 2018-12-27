@@ -36,7 +36,7 @@
 
 <h2>Управление пользователями</h2>
 
-<a asp-area="" asp-controller="Users" asp-action="Register">Зарегистрировать нового пользователя</a>
+<a asp-area="" asp-action="Create">Зарегистрировать нового пользователя</a>
 
 <table>
     <tr>
@@ -48,7 +48,9 @@
     @foreach (var user in Model)
     {
         <tr>
-            <td>ССЫЛКИ НА ДЕЙСТВИЯ</td>
+            <td><form asp-action="Remove" asp-route-id="@user.Id" method="post">
+    <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@user.Id">Изменить</a>
+    <button type="submit" class="btn btn-sm btn-danger">Удалить</button></form></td>
             <td>@user.Email</td>
             <td>@user.Surname @user.Name @user.Patronymic</td>
             <td>@user.DateOfBirth.ToShortDateString()</td>

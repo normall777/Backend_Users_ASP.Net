@@ -1,0 +1,45 @@
+﻿@model WebApplicationUsers.ViewModels.CreateViewModel
+@{
+    ViewData["Title"] = "Регистрация нового пользователя";
+}
+
+<h2>Зарегистрировать нового пользователя</h2>
+
+
+<form asp-controller="Users" asp-action="Create">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div>
+        <label asp-for="Surname"></label><br />
+        <input asp-for="Surname" />
+        <span asp-validation-for="Surname"></span>
+    </div>
+    <div>
+        <label asp-for="Name"></label><br />
+        <input asp-for="Name" />
+        <span asp-validation-for="Name"></span>
+    </div>
+    <div>
+        <label asp-for="Patronymic"></label><br />
+        <input asp-for="Patronymic" />
+        <span asp-validation-for="Patronymic"></span>
+    </div>
+    <div>
+        <label asp-for="DateOfBirth"></label><br />
+        <input asp-for="DateOfBirth" />
+        <span asp-validation-for="DateOfBirth"></span>
+    </div>
+    <div>
+        <label asp-for="Email"></label><br />
+        <input asp-for="Email" />
+        <span asp-validation-for="Email"></span>
+    </div>
+
+    <div>
+        <label asp-for="Password"></label><br />
+        <input asp-for="Password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+    <div>
+        <input type="submit" value="Добавить" />
+    </div>
+</form>

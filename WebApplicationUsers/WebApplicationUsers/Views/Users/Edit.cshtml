@@ -1,0 +1,37 @@
+﻿@model WebApplicationUsers.ViewModels.EditViewModel
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+<form method="post" asp-controller="Users" asp-action="Edit">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+        <label asp-for="Surname"></label><br />
+        <input asp-for="Surname" />
+        <span asp-validation-for="Surname"></span>
+    </div>
+    <div>
+        <label asp-for="Name"></label><br />
+        <input asp-for="Name" />
+        <span asp-validation-for="Name"></span>
+    </div>
+    <div>
+        <label asp-for="Patronymic"></label><br />
+        <input asp-for="Patronymic" />
+        <span asp-validation-for="Patronymic"></span>
+    </div>
+    <div>
+        <label asp-for="DateOfBirth"></label><br />
+        <input asp-for="DateOfBirth" />
+        <span asp-validation-for="DateOfBirth"></span>
+    </div>
+    <div>
+        <label asp-for="Email"></label><br />
+        <input asp-for="Email" />
+        <span asp-validation-for="Email"></span>
+    </div>
+    <div>
+        <input type="submit" value="Сохранить" />
+    </div>
+</form>
