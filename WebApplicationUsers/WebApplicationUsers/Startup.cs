@@ -13,6 +13,7 @@ using WebApplicationUsers.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebApplicationUsers.Models;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace WebApplicationUsers
 {
@@ -50,6 +51,7 @@ namespace WebApplicationUsers
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<IEmailSender, EmailSender>();
             //services.AddDefaultIdentity<IdentityUser>()
                 //.AddEntityFrameworkStores<ApplicationDbContext>();
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebApplicationUsers.Data;
@@ -49,7 +50,15 @@ namespace WebApplicationUsers.Controllers
                     new Random().Next(1000000).ToString() + DateTime.Now.ToLongDateString() + new Random().Next(1000000).ToString()); //Генерация пароля
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index");
+                    //Генерация токена сброса пароля
+                    string code = await userManager.GeneratePasswordResetTokenAsync(user);
+                    var urlEncode = HttpUtility.UrlEncode(code);
+                    var callbackUrl = $"{Request.Scheme}://{Request.Host.Value}/Identity/Account/ResetPassword?userId={user.Id}&code={urlEncode}";
+                    //Отправка Email
+                    EmailSender emailSender = new EmailSender();
+                    await emailSender.SendEmailAsync(model.Email, "Reset Password",
+                        $"Для создания пароля пройдите по ссылке: <a href='{callbackUrl}'>link</a>");
+                    return View("ForgotPasswordConfirmation");
                 }
                 else
                 {
@@ -61,6 +70,7 @@ namespace WebApplicationUsers.Controllers
             }
             return View(model);
         }
+
 
 
 
