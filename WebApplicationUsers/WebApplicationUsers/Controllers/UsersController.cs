@@ -24,6 +24,22 @@ namespace WebApplicationUsers.Controllers
             return View(users);
         }
 
+
+
+        public async void ResetPassword(ApplicationUser user, UserManager<ApplicationUser> userManager)
+        {
+            string code = await userManager.GeneratePasswordResetTokenAsync(user);
+            var urlEncode = HttpUtility.UrlEncode(code);
+            var callbackUrl = $"{Request.Scheme}://{Request.Host.Value}/Identity/Account/ResetPassword?userId={user.Id}&code={urlEncode}";
+            //Отправка Email
+            EmailSender emailSender = new EmailSender();
+            await emailSender.SendEmailAsync(user.Email, "Reset Password",
+                $"Для создания пароля пройдите по ссылке: <a href='{callbackUrl}'>link</a>");
+        }
+
+
+
+
         [HttpGet]
         public IActionResult Create()
         {
@@ -51,15 +67,8 @@ namespace WebApplicationUsers.Controllers
                 if (result.Succeeded)
                 {
                     var _user = await userManager.FindByNameAsync(model.Email);
-
                     //Генерация токена сброса пароля
-                    string code = await userManager.GeneratePasswordResetTokenAsync(_user);
-                    var urlEncode = HttpUtility.UrlEncode(code);
-                    var callbackUrl = $"{Request.Scheme}://{Request.Host.Value}/Identity/Account/ResetPassword?userId={user.Id}&code={urlEncode}";
-                    //Отправка Email
-                    EmailSender emailSender = new EmailSender();
-                    await emailSender.SendEmailAsync(model.Email, "Reset Password",
-                        $"Для создания пароля пройдите по ссылке: <a href='{callbackUrl}'>link</a>");
+                    ResetPassword(_user, userManager);
                     return View("ForgotPasswordConfirmation");
                 }
                 else
@@ -147,6 +156,17 @@ namespace WebApplicationUsers.Controllers
             return RedirectToAction("Index");
         }
 
+        public async Task<IActionResult> ResetPasswordButton(string id,
+            [FromServices] UserManager<ApplicationUser> userManager)
+        {
+            var user = await userManager.FindByIdAsync(id);
+            if (user != null)
+            {
+                ResetPassword(user, userManager);
+            }
+            return RedirectToAction("Index");
+        }
+
 
         /// <summary>
         /// Показ формы регистрации
@@ -156,6 +176,7 @@ namespace WebApplicationUsers.Controllers
         {
             return View();
         }
+
 
         /// <summary>
         /// Метод регистрации (при нажатии "Зарегистрироваться")
