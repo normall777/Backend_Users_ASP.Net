@@ -48,18 +48,6 @@ namespace WebApplicationUsers.Areas.Identity.Pages.Account
 
                 // For more information on how to enable account confirmation and password reset please 
                 // visit https://go.microsoft.com/fwlink/?LinkID=532713
-                /*var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var callbackUrl = Url.Page(
-                    "/Account/ResetPassword",
-                    pageHandler: null,
-                    values: new { code },
-                    protocol: Request.Scheme);
-
-                await _emailSender.SendEmailAsync(
-                    Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-                    */
 
                 string code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var urlEncode = HttpUtility.UrlEncode(code);
@@ -67,7 +55,7 @@ namespace WebApplicationUsers.Areas.Identity.Pages.Account
                 //Отправка Email
                 EmailSender emailSender = new EmailSender();
                 await emailSender.SendEmailAsync(user.Email, "Reset Password",
-                    $"Для задания пароля пройдите по ссылке: <a href='{callbackUrl}'>link</a>");
+                    $"{user.Name} {user.Surname}!<p>Для задания пароля пройдите по ссылке: <a href='{callbackUrl}'>link</a>");
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }
 

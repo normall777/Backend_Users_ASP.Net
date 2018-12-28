@@ -35,7 +35,7 @@ namespace WebApplicationUsers.Controllers
             //Отправка Email
             EmailSender emailSender = new EmailSender();
             await emailSender.SendEmailAsync(user.Email, "Reset Password",
-                $"Для задания пароля пройдите по ссылке: <a href='{callbackUrl}'>link</a>");
+                $"{user.Name} {user.Surname}!<p>Для задания пароля пройдите по ссылке: <a href='{callbackUrl}'>link</a>");
         }
 
 

@@ -1,37 +1,42 @@
 ﻿@model WebApplicationUsers.ViewModels.EditViewModel
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Изменить данные пользователя";
 }
 
-<h2>Edit</h2>
-<form method="post" asp-controller="Users" asp-action="Edit">
-    <div asp-validation-summary="ModelOnly"></div>
-    <div>
-        <label asp-for="Surname"></label><br />
-        <input asp-for="Surname" />
-        <span asp-validation-for="Surname"></span>
+<h2>Изменить данные пользователя</h2>
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" asp-controller="Users" asp-action="Edit">
+            <div asp-validation-summary="ModelOnly"></div>
+            <div class="form-group">
+                <label asp-for="Surname"></label><br />
+                <input asp-for="Surname" class="form-control" />
+                <span asp-validation-for="Surname"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name"></label><br />
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Patronymic"></label><br />
+                <input asp-for="Patronymic" class="form-control" />
+                <span asp-validation-for="Patronymic"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateOfBirth"></label><br />
+                <input asp-for="DateOfBirth" class="form-control" />
+                <span asp-validation-for="DateOfBirth"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email"></label><br />
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email"></span>
+            </div>
+            <p></p>
+            <div class="form-group">
+                <input type="submit" value="Сохранить" class="btn btn-default" />
+            </div>
+        </form>
     </div>
-    <div>
-        <label asp-for="Name"></label><br />
-        <input asp-for="Name" />
-        <span asp-validation-for="Name"></span>
-    </div>
-    <div>
-        <label asp-for="Patronymic"></label><br />
-        <input asp-for="Patronymic" />
-        <span asp-validation-for="Patronymic"></span>
-    </div>
-    <div>
-        <label asp-for="DateOfBirth"></label><br />
-        <input asp-for="DateOfBirth" />
-        <span asp-validation-for="DateOfBirth"></span>
-    </div>
-    <div>
-        <label asp-for="Email"></label><br />
-        <input asp-for="Email" />
-        <span asp-validation-for="Email"></span>
-    </div>
-    <div>
-        <input type="submit" value="Сохранить" />
-    </div>
-</form>
+</div>

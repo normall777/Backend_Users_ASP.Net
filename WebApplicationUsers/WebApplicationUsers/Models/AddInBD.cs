@@ -18,7 +18,7 @@ namespace WebApplicationUsers.Models
             }
             if (await userManager.FindByNameAsync(adminEmail) == null)
             {
-                ApplicationUser admin = new ApplicationUser { Email = adminEmail, UserName = adminEmail };
+                ApplicationUser admin = new ApplicationUser { Email = adminEmail, UserName = adminEmail, Name = "Администратор", DateOfBirth=DateTime.Now };
                 IdentityResult result = await userManager.CreateAsync(admin, password);
                 if (result.Succeeded)
                 {
