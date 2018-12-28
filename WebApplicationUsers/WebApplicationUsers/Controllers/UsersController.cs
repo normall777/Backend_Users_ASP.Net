@@ -24,7 +24,6 @@ namespace WebApplicationUsers.Controllers
             return View(users);
         }
 
-
         /// <summary>
         /// Генерация токена сброса пароля
         /// </summary>
@@ -87,9 +86,6 @@ namespace WebApplicationUsers.Controllers
             }
             return View(model);
         }
-
-
-
 
         /// <summary>
         /// Переход на страницу редактирования/регистрации пользователя
@@ -180,53 +176,6 @@ namespace WebApplicationUsers.Controllers
             return RedirectToAction("Index");
         }
 
-
-        /// <summary>
-        /// Показ формы регистрации
-        /// </summary>
-        [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
-
-
-        /// <summary>
-        /// Метод регистрации (при нажатии "Зарегистрироваться")
-        /// </summary>
-        [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model,
-            [FromServices] UserManager<ApplicationUser> userManager,
-            [FromServices] SignInManager<ApplicationUser> signInManager)
-        {
-            if (ModelState.IsValid)
-            {
-                ApplicationUser user = new ApplicationUser
-                {
-                    Email = model.Email,
-                    UserName = model.Email,
-                    Name = model.Name,
-                    Surname = model.Surname,
-                    Patronymic = model.Patronymic,
-                    DateOfBirth = model.DateOfBirth
-                };
-                var result = await userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
-                    await signInManager.SignInAsync(user, false); //После регистрации пользователь входит
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                }
-            }
-            return View(model);
-        }
-
         /// <summary>
         /// Изменение роли
         /// </summary>
@@ -252,5 +201,6 @@ namespace WebApplicationUsers.Controllers
             }
             return RedirectToAction("Index");
         }
+
     }
 }
