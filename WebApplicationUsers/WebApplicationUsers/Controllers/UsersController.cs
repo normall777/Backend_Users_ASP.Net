@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebApplicationUsers.Data;
@@ -11,13 +12,12 @@ using WebApplicationUsers.ViewModels;
 
 namespace WebApplicationUsers.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
-        
-        public UsersController(ApplicationDbContext context)
-        {
-            
-        }
+        /// <summary>
+        /// Возвращает представление Users.Index
+        /// </summary>
         public IActionResult Index([FromServices] ApplicationDbContext db)
         {
             var users = db.Users.ToList();
@@ -25,7 +25,9 @@ namespace WebApplicationUsers.Controllers
         }
 
 
-
+        /// <summary>
+        /// Генерация токена сброса пароля
+        /// </summary>
         public async void ResetPassword(ApplicationUser user, UserManager<ApplicationUser> userManager)
         {
             string code = await userManager.GeneratePasswordResetTokenAsync(user);
@@ -34,17 +36,21 @@ namespace WebApplicationUsers.Controllers
             //Отправка Email
             EmailSender emailSender = new EmailSender();
             await emailSender.SendEmailAsync(user.Email, "Reset Password",
-                $"Для создания пароля пройдите по ссылке: <a href='{callbackUrl}'>link</a>");
+                $"Для задания пароля пройдите по ссылке: <a href='{callbackUrl}'>link</a>");
         }
 
 
 
-
+        /// <summary>
+        /// Возвращает представление Create - создание пользователя администратором
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
+
         /// <summary>
         /// Создание новых пользователей через ссылку в index
         /// </summary>
@@ -67,7 +73,7 @@ namespace WebApplicationUsers.Controllers
                 if (result.Succeeded)
                 {
                     var _user = await userManager.FindByNameAsync(model.Email);
-                    //Генерация токена сброса пароля
+                    // Отправить пользователю пароль
                     ResetPassword(_user, userManager);
                     return View("ForgotPasswordConfirmation");
                 }
@@ -109,6 +115,7 @@ namespace WebApplicationUsers.Controllers
             };
             return View(model);
         }
+
         /// <summary>
         /// Процедура регистрации/редактирования пользователя с сохранением
         /// </summary>
@@ -145,6 +152,9 @@ namespace WebApplicationUsers.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Кнопка для удаления пользователя
+        /// </summary>
         public async Task<IActionResult> Remove(string id,
             [FromServices] UserManager<ApplicationUser> userManager)
         {
@@ -156,6 +166,9 @@ namespace WebApplicationUsers.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// Кнопка сброса пароля
+        /// </summary>
         public async Task<IActionResult> ResetPasswordButton(string id,
             [FromServices] UserManager<ApplicationUser> userManager)
         {
@@ -214,5 +227,30 @@ namespace WebApplicationUsers.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Изменение роли
+        /// </summary>
+        public async Task<IActionResult> ToggleAdmin(string id,
+            [FromServices] UserManager<ApplicationUser> userManager,
+            [FromServices] RoleManager<IdentityRole> roleManager)
+        {
+            var role = await roleManager.FindByNameAsync("Admin");
+            if (role == null)
+            {
+                await roleManager.CreateAsync(new IdentityRole("Admin"));
+            }
+
+            var user = await userManager.FindByIdAsync(id);
+            var isAdmin = await userManager.IsInRoleAsync(user, "Admin");
+            if (!isAdmin)
+            {
+                await userManager.AddToRoleAsync(user, "Admin");
+            }
+            else
+            {
+                await userManager.RemoveFromRoleAsync(user, "Admin");
+            }
+            return RedirectToAction("Index");
+        }
     }
 }
